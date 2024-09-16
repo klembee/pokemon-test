@@ -7,7 +7,7 @@ const pokemonSchema = z.object({
     .transform(pokemon => ({
         ...pokemon,
         get id(): number {
-            return Number(pokemon.url.match(/https:\/\/pokeapi\.co\/api\/v2\/pokemon\/(\d+)/)![1])
+            return Number(/https:\/\/pokeapi\.co\/api\/v2\/pokemon\/(\d+)/.exec(pokemon.url)![1])
         }
     }));
 
