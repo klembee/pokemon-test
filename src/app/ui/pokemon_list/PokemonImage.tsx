@@ -1,4 +1,4 @@
-import { Pokemon } from "#/app/lib/pokemon/definitions"
+import { Pokemon } from "#/app/lib/pokemon/definitions";
 import Image from "next/image";
 
 interface PokeMonTableImageProps {

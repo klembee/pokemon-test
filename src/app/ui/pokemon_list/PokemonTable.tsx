@@ -5,35 +5,21 @@ import { Pagination, PaginationContent, PaginationItem, PaginationNext, Paginati
 import { useQuery, useQueryClient, UseQueryResult } from "@tanstack/react-query";
 import _ from "lodash";
 import { useState } from "react";
+import { fetchPokemons, POKEMON_FETCH_QUERY_KEY } from "#/app/lib/pokemon/data";
 
 const perPage = 5;
-const POKEMON_FETCH_QUERY_KEY = "pokemon_fetch";
-
-function fetchPokemons(page: number, per_page = 10): UseQueryResult<PokemonListSchema, Error> {
-    return useQuery({
-        queryKey: [POKEMON_FETCH_QUERY_KEY],
-        queryFn: async () => {
-            return await fetch(`https://pokeapi.co/api/v2/pokemon?offset=${(page - 1) * per_page}&limit=${per_page}`)
-                .then((result) => result.json())
-                .then((result) => {
-                    return pokemonListApiSchema.parse(result)
-                })
-        }
-    });
-}
 
 export default function PokemonTable() {
-    const queryClient = useQueryClient();
-
-    const invalidateQuery = _.debounce(async () => {
-        await queryClient.invalidateQueries({ queryKey: [POKEMON_FETCH_QUERY_KEY] })
-    }, 150)
-
     const [currentPage, setPage] = useState(1);
+
+    const queryClient = useQueryClient();
+    const invalidateQuery = _.debounce(() => {
+        queryClient.invalidateQueries({ queryKey: [POKEMON_FETCH_QUERY_KEY] })
+    }, 150)
 
     const { isPending, error, data, isFetching } = fetchPokemons(currentPage, perPage)
 
-    if (isPending) return <p>Loading</p>
+    if (isPending) return <p>Loading...</p>
     if (error) {
         return <p>Error fetching pokemon list</p>
     }

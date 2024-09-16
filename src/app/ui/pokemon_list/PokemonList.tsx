@@ -1,7 +1,6 @@
 'use client';
 
 import PokemonTable from "./PokemonTable";
-import _ from "lodash";
 
 export default function PokemonList() {
     return (
